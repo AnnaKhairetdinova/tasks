@@ -26,7 +26,7 @@ class TagController extends Controller
         $tag->save();
 
         return redirect()
-            ->route('index');
+            ->route('tags.index');
     }
 
     public function index()

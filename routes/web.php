@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\IndexController;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,20 +18,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Auth::routes();
 
-Route::get('/', [IndexController::class, 'index'])
-    ->name('index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/register', [RegisterController::class, 'create'])
-    ->name('register.create');
-
-Route::post('/register', [RegisterController::class, 'store'])
-    ->name('register.store');
-
-Route::get('/users', [RegisterController::class, 'index'])
+Route::get('/users', [UserController::class, 'index'])
     ->name('users.index');
 
-Route::get('/users/{uuid}', [RegisterController::class, 'show'])
+Route::get('/users/{uuid}', [UserController::class, 'show'])
     ->name('users.show');
 
 Route::get('/tasks/create', [TaskController::class, 'create'])
@@ -54,36 +49,36 @@ Route::get('/tasks/{uuid}', [TaskController::class, 'show'])
 Route::delete('/tasks/{uuid}', [TaskController::class, 'destroy'])
     ->name('tasks.destroy');
 
-Route::get('/statuses/create', [StatusController::class, 'create'])
-    ->name('status.create');
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('/statuses/create', [StatusController::class, 'create'])
+        ->name('status.create');
 
-Route::post('/statuses/create', [StatusController::class, 'store'])
-    ->name('status.store');
+    Route::delete('/statuses/{uuid}', [StatusController::class, 'destroy'])
+        ->name('statuses.destroy');
+
+    Route::post('/statuses/create', [StatusController::class, 'store'])
+        ->name('status.store');
+
+    Route::get('/statuses/{uuid}', [StatusController::class, 'show'])
+        ->name('statuses.show');
+
+    Route::get('/tags/create', [TagController::class, 'create'])
+        ->name('tag.create');
+
+    Route::post('/tags/create', [TagController::class, 'store'])
+        ->name('tag.store');
+
+    Route::get('/tags/{uuid}', [TagController::class, 'show'])
+        ->name('tags.show');
+
+    Route::delete('/tags/{uuid}', [TagController::class, 'destroy'])
+        ->name('tags.destroy');
+});
+
+
 
 Route::get('/statuses', [StatusController::class, 'index'])
     ->name('statuses.index');
 
-Route::get('/statuses/{uuid}', [StatusController::class, 'show'])
-    ->name('statuses.show');
-
-Route::delete('/statuses/{uuid}', [StatusController::class, 'destroy'])
-    ->name('statuses.destroy');
-
-Route::get('/tags/create', [TagController::class, 'create'])
-    ->name('tag.create');
-
-Route::post('/tags/create', [TagController::class, 'store'])
-    ->name('tag.store');
-
 Route::get('/tags', [TagController::class, 'index'])
     ->name('tags.index');
-
-Route::get('/tags/{uuid}', [TagController::class, 'show'])
-    ->name('tags.show');
-
-Route::delete('/tags/{uuid}', [TagController::class, 'destroy'])
-    ->name('tags.destroy');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Задачи')
+@section('title', 'Список пользователей')
 
-@section('header', 'Задачи')
+@section('header', 'Список пользователей')
 
 @section('content')
     @if (count($users) === 0)
@@ -10,23 +10,26 @@
             Пользователей нет
         </div>
     @else
-        <table class="users">
-            <thead>
-            <tr class="user_header">
-                <td>Имя</td>
-                <td>Фамилия</td>
-                <td>Почта</td>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($users as $user)
-                <tr>
-                    <td><a href="{{ route('users.show', $user->uuid) }}">{{$user->first_name}}</a></td>
-                    <td>{{$user->second_name}}</td>
-                    <td>{{$user->email}}</td>
+            <table class="table table-hover">
+                <thead>
+                <tr class="user_header">
+                    <td>Имя</td>
+                    <td>Фамилия</td>
+                    <td>Почта</td>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach ($users as $user)
+                    <tr>
+                        <td><a href="{{ route('users.show', $user->uuid) }}">{{$user->first_name}}</a></td>
+                        <td>{{$user->second_name}}</td>
+                        <td>{{$user->email}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            <div>
+                {{ $users->links() }}
+            </div>
     @endif
 @endsection

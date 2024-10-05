@@ -12,10 +12,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-<div class="container">
-    <ul class="nav">
+<nav class="navbar navbar-expand-lg">
+<div class="container-fluid">
+    <?php
+    if (Auth::check()) { ?>
+        <ul class="nav">
         <li class="nav-item">
-            <a class="pl-20 nav-link active" aria-current="page" href="{{ route('index') }}">Главная</a>
+            <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Главная</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('tasks.index') }}">Задачи</a>
@@ -30,10 +33,36 @@
             <a class="nav-link" href="{{ route('users.index') }}">Пользователи</a>
         </li>
     </ul>
+    <?php
+    } ?>
+
+    <span class="navbar-text">
+        @guest
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">Register</a>
+                </li>
+            </ul>
+        @endguest
+
+        @auth
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            <a class="nav-link" href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+            </a>
+        @endauth
+    </span>
+</div>
+</nav>
+<div class="vw-75 p-4 translate-absolute mx-auto">
     <h1>@yield('header')</h1>
-    <div class="section">
-        @yield('content')
-    </div>
+    @yield('content')
 </div>
 </body>
 </html>

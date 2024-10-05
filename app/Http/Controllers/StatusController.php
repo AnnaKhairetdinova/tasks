@@ -16,8 +16,8 @@ class StatusController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'name' => 'required|between:5,50',
-            'code' => 'required|between:5,50',
+            'name' => 'required|between:3,50',
+            'code' => 'required|between:3,50',
         ]);
 
         $status = new Status();
@@ -25,7 +25,7 @@ class StatusController extends Controller
         $status->save();
 
         return redirect()
-            ->route('index');
+            ->route('statuses.index');
     }
 
     public function index()

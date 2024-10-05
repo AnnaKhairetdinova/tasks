@@ -22,23 +22,23 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'creator_uuid' => 'required',
             'executor_uuid' => 'required',
-            'name' => 'required|between:5,150',
+            'name' => 'required|between:3,150',
             'description' => 'required|between:5,300',
-            'status' => 'required|between:5,50'
+            'status' => 'required|between:3,50'
         ]);
 
         $task = new Task();
+        $task->creator_uuid = auth()->id();
         $task->fill($data);
         $task->save();
 
         return redirect()
-            ->route('index');
+            ->route('tasks.index');
     }
     public function index()
     {
-        $tasks = Task::paginate(2);
+        $tasks = Task::paginate(3);
         return view('task.index', compact('tasks'));
     }
 

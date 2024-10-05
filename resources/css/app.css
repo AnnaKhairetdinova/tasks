@@ -1,5 +1,22 @@
 body {
-    background: pink;
+    background: GhostWhite;
 
     font-family: "Raleway", sans-serif;
+}
+
+a {
+    color: Blue;
+    transition: 0.8s;
+}
+a:hover {
+    color: SlateBlue;
+}
+
+.nav-link {
+    color: Blue;
+    transition: 0.8s;
+}
+
+.nav-link:hover {
+    color: SlateBlue;
 }
