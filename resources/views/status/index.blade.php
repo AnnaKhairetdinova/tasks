@@ -8,7 +8,7 @@
     <?php
         if (auth()->user()->is_admin === 1) { ?>
             <div>
-                <a class="btn btn-primary" href="{{ route('status.create') }}">Создать статус</a>
+                <a class="btn btn-primary" href="{{ route('status.create') }}" role="button">Создать статус</a>
             </div>
         <?php } ?>
 

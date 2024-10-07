@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use App\Models\Tag;
+use App\Models\Task;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -17,7 +19,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'name' => 'required|between:5,50',
+            'name' => 'required|between:3,50',
             'description' => 'required|between:5,300',
         ]);
 

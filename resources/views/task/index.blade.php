@@ -7,7 +7,7 @@
 @section('content')
     <div>
         <div>
-            <a class="btn btn-primary" href="{{ route('task.create') }}">Создать задачу</a>
+            <a class="btn btn-primary" href="{{ route('task.create') }}" role="button" >Создать задачу</a>
         </div>
         @if (count($tasks) === 0)
             <div>

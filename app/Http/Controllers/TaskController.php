@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Status;
+use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -15,8 +17,9 @@ class TaskController extends Controller
         $task = new Task();
         $statuses = Status::all();
         $users = User::all();
+        $tags = Tag::all();
 
-        return view('task.create', compact('task', 'statuses', 'users'));
+        return view('task.create', compact('task', 'statuses', 'users', 'tags'));
     }
 
     public function store(Request $request)
@@ -25,13 +28,16 @@ class TaskController extends Controller
             'executor_uuid' => 'required',
             'name' => 'required|between:3,150',
             'description' => 'required|between:5,300',
-            'status' => 'required|between:3,50'
+            'status' => 'required|between:3,50',
+            'tag' => 'required',
         ]);
 
         $task = new Task();
         $task->creator_uuid = auth()->id();
         $task->fill($data);
         $task->save();
+
+        $task->tags()->attach($data['tag']);
 
         return redirect()
             ->route('tasks.index');
@@ -68,7 +74,8 @@ class TaskController extends Controller
     public function show($uuid)
     {
         $task = Task::findOrFail($uuid);
-        return view('task.show', compact('task'));
+        $tags = $task->tags()->get();
+        return view('task.show', compact('task', 'tags'));
     }
 
     public function destroy($uuid)
