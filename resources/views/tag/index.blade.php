@@ -8,7 +8,7 @@
     <?php
         if (auth()->user()->is_admin === 1) { ?>
             <div>
-                <a class="btn btn-primary" href="{{ route('tag.create') }}">Создать метку</a>
+                <a class="btn btn-primary" href="{{ route('tag.create') }}" role="button" >Создать метку</a>
             </div>
         <?php } ?>
 
