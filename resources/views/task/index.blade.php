@@ -6,8 +6,27 @@
 
 @section('content')
     <div>
-        <div>
-            <a class="btn btn-primary" href="{{ route('task.create') }}" role="button" >Создать задачу</a>
+        <div style="display: flex;">
+            <div>
+                <a class="btn btn-primary" href="{{ route('task.create') }}" role="button" >Создать задачу</a>
+            </div>
+            <div style="margin-left: 20px">
+                <select class="form-select" id="status" name="status" onchange="myFunction()">
+                    <option selected>Статус</option>
+                    @foreach ($statuses as $status)
+                        <option value="{{ $status->code }}">{{ $status->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <script>
+                const select = document.getElementById('status');
+                const selectedValue = select.value;
+
+                async function myFunction() {
+                    const params = new URLSearchParams({ status: selectedValue }).toString();
+                    await fetch(`http://127.0.0.1:8000/tasks?${params}`);
+                }
+            </script>
         </div>
         @if (count($tasks) === 0)
             <div>
@@ -38,7 +57,7 @@
                     </tbody>
                 </table>
                 <div>
-                    {{ $tasks->links() }}
+                    {{ $tasks->withQueryString()->links() }}
                 </div>
             </div>
         @endif
