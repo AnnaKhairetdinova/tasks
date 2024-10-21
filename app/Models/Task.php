@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 
 class Task extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, Filterable;
 
     protected $primaryKey = 'uuid';
     public $incrementing = false;
@@ -33,12 +34,12 @@ class Task extends Model
         });
     }
 
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_uuid', 'uuid');
     }
 
-    public function executor()
+    public function executor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'executor_uuid', 'uuid');
     }

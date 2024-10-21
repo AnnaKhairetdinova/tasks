@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Requests\FilterRequest;
+use App\Http\Filters\TaskFilter;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -42,10 +43,16 @@ class TaskController extends Controller
         return redirect()
             ->route('tasks.index');
     }
-    public function index()
+
+    public function index(FilterRequest $request)
     {
-        $tasks = Task::paginate(3);
-        return view('task.index', compact('tasks'));
+        $data = $request->validated();
+        $filter = app()->make(TaskFilter::class, ['queryParams' => array_filter($data)]);
+        $tasks = Task::filter($filter)->paginate(5);
+
+        $statuses = Status::all();
+
+        return view('task.index', compact('tasks', 'statuses'));
     }
 
     public function edit($uuid)
